@@ -1,6 +1,17 @@
 export class BmpParser {
+  /**
+   * @readonly
+   */
   #BMP_HEADER_FIELD = 'BM'
+
+  /**
+   * @type {DataView}
+   */
   #view
+
+  /**
+   * @type {TextDecoder}
+   */
   #decoder
 
   /**
@@ -9,19 +20,20 @@ export class BmpParser {
   constructor(view) {
     this.#view = view
     this.#decoder = new TextDecoder()
-    this.checkHeaderField()
+    this.#checkHeaderField()
   }
 
   /**
-   * @returns {Boolean}
+   * Checking for compliance with bmp format
    */
-  checkHeaderField() {
+  #checkHeaderField() {
     if (this.#decoder.decode(new Uint8Array(this.#view.buffer, 0, 2)) !== this.#BMP_HEADER_FIELD) {
       throw new Error('Ожидается .bmp файл!')
     }
   }
 
   /**
+   * Offset where the pixel array (bitmap data) can be found
    * @returns {Number}
    */
   get offsetBits() {

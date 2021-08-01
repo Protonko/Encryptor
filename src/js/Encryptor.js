@@ -1,10 +1,29 @@
 import {BmpParser} from './BmpParser';
 
 export class Encryptor {
+  /**
+   * @readonly
+   */
   #CHAR_BORDER = '∇'
+
+  /**
+   * @readonly
+   */
   #offset = 0
+
+  /**
+   * @readonly
+   */
   #STEP = 3
+
+  /**
+   * @type {DataView}
+   */
   #view
+
+  /**
+   * @type {BmpParser}
+   */
   #bmpParser
 
   /**
@@ -14,7 +33,9 @@ export class Encryptor {
     this.#view = new DataView(buffer)
     this.#bmpParser = new BmpParser(this.#view)
   }
+
   /**
+   * Converts binary code to text
    * @param {String} sValue
    * @returns {String}
    */
@@ -25,6 +46,7 @@ export class Encryptor {
   }
 
   /**
+   * Converts text to binary code
    * @param {String} sValue
    * @returns {Array.<String>}
    */
