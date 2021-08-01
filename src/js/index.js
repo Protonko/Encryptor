@@ -1,4 +1,4 @@
-import {BmpParser} from './BmpParser'
+import {Encryptor} from './Encryptor';
 
 const input = document.getElementById('file-input')
 const button = document.getElementById('decipher-button')
@@ -8,12 +8,11 @@ button.onclick = () => {
 }
 
 input.onchange = async event => {
-  console.log(123);
   const buffer = await event.target.files[0].arrayBuffer()
   const link = document.createElement('a')
-  const parserBMP = new BmpParser(buffer)
+  const encryptor = new Encryptor(buffer)
   link.download = 'test.bmp'
   link.innerText = 'Download'
-  link.href = URL.createObjectURL(new Blob([parserBMP.encrypt()], {type: 'image/bmp'}))
+  link.href = URL.createObjectURL(new Blob([encryptor.encrypt()], {type: 'image/bmp'}))
   document.querySelector('.test').appendChild(link)
 }
