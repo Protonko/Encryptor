@@ -25,14 +25,25 @@ body {
     background-color: var(--alabaster);
 }
 
+.container {
+    width: 1140px;
+    margin: auto;
+}
+
 .row {
     display: flex;
     align-items: stretch;
-    margin-right: calc(-1 * var(--columns-vertical-gutter));
-    margin-left: calc(-1 * var(--columns-vertical-gutter));
+    justify-content: center;
+    margin-right: calc(-2 * var(--columns-vertical-gutter));
+    margin-left: calc(-2 * var(--columns-vertical-gutter));
+}
+
+.row:not(:last-child) {
+    margin-bottom: 20px;
 }
 
 .col {
+    height: 100%;
     margin-right: var(--columns-vertical-gutter);
     margin-left: var(--columns-vertical-gutter);
 }

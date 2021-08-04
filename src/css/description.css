@@ -1,0 +1,13 @@
+.description {
+    font-size: 16px;
+    line-height: 1.2;
+    color: var(--shark);
+}
+
+.description:last-child {
+    margin-bottom: 0;
+}
+
+.description:first-child {
+    margin-top: 0;
+}
