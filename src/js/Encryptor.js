@@ -1,25 +1,17 @@
 import {BmpParser} from './BmpParser';
 
 export class Encryptor {
-  /**
-   * @readonly
-   */
-  #CHAR_BORDER = '∇'
-
-  /**
-   * @readonly
-   */
   #offset = 0
-
-  /**
-   * @readonly
-   */
-  #STEP = 3
 
   /**
    * @type {DataView}
    */
   #view
+
+  /**
+   * @type {String}
+   */
+  #encryptionText
 
   /**
    * @type {BmpParser}
@@ -28,25 +20,17 @@ export class Encryptor {
 
   /**
    * @param {ArrayBuffer} buffer
+   * @param {String} encryptionText
+   * @param {BmpParser} bmpParser
    */
-  constructor(buffer) {
+  constructor(buffer, encryptionText, bmpParser) {
     this.#view = new DataView(buffer)
-    this.#bmpParser = new BmpParser(this.#view)
+    this.#encryptionText = encryptionText
+    this.#bmpParser = bmpParser
   }
 
   /**
-   * Converts binary code to text
-   * @param {String} sValue
-   * @returns {String}
-   */
-  decode(sValue) {
-    console.log(sValue);
-    console.log(String.fromCharCode(parseInt(sValue, 2)));
-    return String.fromCharCode(parseInt(sValue, 2))
-  }
-
-  /**
-   * Converts text to binary code
+   * Конвертирует текст в бинарный код
    * @param {String} sValue
    * @returns {Array.<String>}
    */
@@ -56,38 +40,25 @@ export class Encryptor {
 
   encrypt() {
     this.#offset = this.#bmpParser.offsetBits
-    const aBinaryChars = this.encode(this.#CHAR_BORDER + 'Привет' + this.#CHAR_BORDER)
-    aBinaryChars.join().split('').forEach(char => {
-      if (this.#offset >= (this.#bmpParser.fileSize - this.#STEP)) {
+    const aBinaryChars = this.encode(this.#encryptionText).join().split('')
+
+    aBinaryChars.forEach(char => {
+      const currentValue = +this.#view.getUint8(this.#offset)
+      /** @todo Подумать, что делать если цвет 255 и мы добавляем еще 1 */
+      const updatedValue = currentValue + (char === ',' ? 2 : +char)
+
+      /** @todo Подумать, что делать если фраза больше файла? */
+      if (this.#offset >= this.#bmpParser.fileSize) {
         alert('Файл кончился!')
       }
 
-      if (char === ',') this.#view.setUint8(this.#offset, 0)
-
-      /** @todo: Исправить .setUint8() */
-      this.#view.setUint8(this.#offset, +this.#view.getUint8(this.#offset) + +char)
+      this.#view.setUint8(this.#offset, updatedValue)
       this.#offset++
     })
 
+    // Добавляем точку выхода
+    this.#view.setUint8(this.#offset, +this.#view.getUint8(this.#offset) + 3)
 
     return this.#view
-    // console.log(this.decode('10001000000111')); // ∇
-  }
-
-  decipher() {
-    let cycleInProgress = true
-    this.#offset = this.#bmpParser.offsetBits
-    let string = ''
-
-    if (this.decode(this.#view.getUint8(this.#bmpParser.offsetBits)) !== this.#CHAR_BORDER) cycleInProgress = false
-
-    while (cycleInProgress) {
-      const char = this.decode(this.#view.getUint8(this.#offset))
-      if (char === this.#CHAR_BORDER) cycleInProgress = false
-      this.#offset++
-      string += char
-    }
-
-    return string
   }
 }

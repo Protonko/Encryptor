@@ -15,10 +15,10 @@ export class BmpParser {
   #decoder
 
   /**
-   * @param {DataView} view
+   * @param {ArrayBuffer} buffer
    */
-  constructor(view) {
-    this.#view = view
+  constructor(buffer) {
+    this.#view = new DataView(buffer)
     this.#decoder = new TextDecoder()
     this.#checkHeaderField()
   }

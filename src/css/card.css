@@ -1,0 +1,27 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 20px;
+    border-radius: 16px;
+    background-color: var(--white);
+    box-shadow: rgba(0, 0, 0, .08) 0 4px 20px 0;
+}
+
+.card__title {
+    margin: 0;
+}
+
+.card__body:not(:first-child) {
+    flex-grow: 1;
+    margin-top: 20px;
+}
+
+.card__footer-item {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.card__footer-item:not(:last-child) {
+    margin-bottom: 10px;
+}

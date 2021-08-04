@@ -1,0 +1,38 @@
+@import "card.css";
+@import "file-uploader.css";
+
+* {
+    /* Gutters */
+    --columns-vertical-gutter: 10px;
+
+    /* Colors */
+    --black: #000000;
+    --shark: #2B2D33;
+    --alabaster: #FBFBFB;
+    --turbo: #FEE600;
+    --iron: #D5D5D6;
+    --white: #FFFFFF;
+    --allports: #00809C;
+    --venice-blue: #04617D;
+
+    /* Transitions */
+    --transizion-duration: 300ms;
+
+    font-family: 'Helvetica', sans-serif;
+}
+
+body {
+    background-color: var(--alabaster);
+}
+
+.row {
+    display: flex;
+    align-items: stretch;
+    margin-right: calc(-1 * var(--columns-vertical-gutter));
+    margin-left: calc(-1 * var(--columns-vertical-gutter));
+}
+
+.col {
+    margin-right: var(--columns-vertical-gutter);
+    margin-left: var(--columns-vertical-gutter);
+}

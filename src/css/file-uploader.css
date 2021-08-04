@@ -1,0 +1,17 @@
+.file-uploader__button {
+    display: block;
+    padding: 5px 20px;
+    color: var(--shark);
+    cursor: pointer;
+    transition: border-color var(--transizion-duration);
+    border: 2px solid var(--iron);
+    border-radius: 8px;
+}
+.file-uploader__button:hover {
+    border-color: var(--shark);
+}
+
+.file-uploader__input {
+    position: absolute;
+    opacity: 0;
+}
