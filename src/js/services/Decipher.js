@@ -31,11 +31,11 @@ export class Decipher {
 
   /**
    * Конвертирует бинарный код в текст
-   * @param {String} sValue
+   * @param {String} value
    * @returns {String}
    */
-  decode(sValue) {
-    return String.fromCharCode(parseInt(sValue, 2))
+  decode(value) {
+    return String.fromCharCode(parseInt(value, 2))
   }
 
   /** @todo Реализовать проверку на наличие зашифрованного сообщения (заголовки?) */

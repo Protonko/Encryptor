@@ -31,23 +31,23 @@ export class Encryptor {
 
   /**
    * Конвертирует текст в бинарный код
-   * @param {String} sValue
+   * @param {String} value
    * @returns {Array.<String>}
    */
-  encode(sValue) {
-    return sValue.split('').map(char => char.charCodeAt(0).toString(2))
+  encode(value) {
+    return value.split('').map(char => char.charCodeAt(0).toString(2))
   }
 
   encrypt() {
     this.#offset = this.#bmpParser.offsetBits
-    const aBinaryChars = this.encode(this.#encryptionText).join().split('')
+    const binaryChars = this.encode(this.#encryptionText).join().split('')
 
-    aBinaryChars.forEach(char => {
+    binaryChars.forEach(char => {
       const currentValue = +this.#view.getUint8(this.#offset)
       /** @todo Подумать, что делать если цвет 255 и мы добавляем еще 1 */
       const updatedValue = currentValue + (char === ',' ? 2 : +char)
 
-      /** @todo Подумать, что делать если фраза больше файла? */
+      /** @todo Подумать, что делать если фраза больше файла */
       if (this.#offset >= this.#bmpParser.fileSize) {
         alert('Файл кончился!')
       }

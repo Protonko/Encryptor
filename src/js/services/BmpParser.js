@@ -24,7 +24,7 @@ export class BmpParser {
   }
 
   /**
-   * Checking for compliance with bmp format
+   * Проверка на соответствие файла .bmp формату
    */
   #checkHeaderField() {
     if (this.#decoder.decode(new Uint8Array(this.#view.buffer, 0, 2)) !== this.#BMP_HEADER_FIELD) {
@@ -33,7 +33,7 @@ export class BmpParser {
   }
 
   /**
-   * Offset where the pixel array (bitmap data) can be found
+   * Смещение, где может быть найден массив пикселей (bitmap data)
    * @returns {Number}
    */
   get offsetBits() {
