@@ -19,6 +19,7 @@
     --transizion-duration: 300ms;
 
     font-family: 'Helvetica', sans-serif;
+    box-sizing: border-box;
 }
 
 body {
@@ -43,7 +44,6 @@ body {
 }
 
 .col {
-    height: 100%;
     margin-right: var(--columns-vertical-gutter);
     margin-left: var(--columns-vertical-gutter);
 }

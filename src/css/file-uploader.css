@@ -1,5 +1,6 @@
 .file-uploader__button {
     display: block;
+    min-width: 300px;
     padding: 5px 20px;
     color: var(--shark);
     cursor: pointer;
