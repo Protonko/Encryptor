@@ -21,12 +21,11 @@ export class Encryptor {
   /**
    * @param {ArrayBuffer} buffer
    * @param {String} encryptionText
-   * @param {BmpParser} bmpParser
    */
-  constructor(buffer, encryptionText, bmpParser) {
+  constructor(buffer, encryptionText) {
     this.#view = new DataView(buffer)
     this.#encryptionText = encryptionText
-    this.#bmpParser = bmpParser
+    this.#bmpParser = new BmpParser(buffer)
   }
 
   /**
@@ -38,23 +37,32 @@ export class Encryptor {
     return value.split('').map(char => char.charCodeAt(0).toString(2))
   }
 
+  #checkOffsetOverflow() {
+    if (this.#offset >= this.#bmpParser.fileSize) {
+      throw new Error('Фраза слишком велика для данного файла!')
+    }
+  }
+
+  /**
+   * @return {DataView}
+   * @throws {Error}
+   */
   encrypt() {
     this.#offset = this.#bmpParser.offsetBits
     const binaryChars = this.encode(this.#encryptionText).join().split('')
 
-    binaryChars.forEach(char => {
-      const currentValue = +this.#view.getUint8(this.#offset)
-      /** @todo Подумать, что делать если цвет 255 и мы добавляем еще 1 */
-      const updatedValue = currentValue + (char === ',' ? 2 : +char)
-
-      /** @todo Подумать, что делать если фраза больше файла */
-      if (this.#offset >= this.#bmpParser.fileSize) {
-        alert('Файл кончился!')
-      }
-
-      this.#view.setUint8(this.#offset, updatedValue)
-      this.#offset++
-    })
+    try {
+      binaryChars.forEach(char => {
+        this.#checkOffsetOverflow()
+        const currentValue = +this.#view.getUint8(this.#offset)
+        /** @todo Подумать, что делать если цвет 255 и мы добавляем еще 1 */
+        const updatedValue = currentValue + (char === ',' ? 2 : +char)
+        this.#view.setUint8(this.#offset, updatedValue)
+        this.#offset++
+      })
+    } catch (error) {
+      throw new Error(error.message)
+    }
 
     // Добавляем точку выхода
     this.#view.setUint8(this.#offset, +this.#view.getUint8(this.#offset) + 3)

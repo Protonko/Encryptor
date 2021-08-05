@@ -46,4 +46,12 @@ export class BmpParser {
   get fileSize() {
     return this.#view.getUint32(2, true)
   }
+
+  /**
+   * Идентификатор файла
+   * @returns {Number}
+   */
+  get applicationDefinedIdentifier() {
+    return this.#view.getUint32(76, true)
+  }
 }

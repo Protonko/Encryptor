@@ -1,17 +1,5 @@
 import {Decipher} from '../services/Decipher'
-import {BmpParser} from '../services/BmpParser'
-
-/**
- * @param {String} text
- * @return {HTMLParagraphElement}
- */
-const createDecryptedText = (text) => {
-  const paragraph = document.createElement('p')
-  paragraph.className = 'description'
-  paragraph.innerText = text
-
-  return paragraph
-}
+import {createDescription} from './createDescription'
 
 export const decipherForm = () => {
   const encryptedFileInput = document.querySelector('[data-file-input="encrypted"]')
@@ -23,7 +11,13 @@ export const decipherForm = () => {
     event.preventDefault()
     const encryptedBuffer = await encryptedFileInput.files[0].arrayBuffer()
     const bufferKey = await keyFileInput.files[0].arrayBuffer()
-    const decipher = new Decipher(encryptedBuffer, bufferKey, new BmpParser(bufferKey))
-    result.appendChild(createDecryptedText(decipher.decrypt()))
+    const decipher = new Decipher(encryptedBuffer, bufferKey)
+    result.innerHTML = ''
+
+    try {
+      result.appendChild(createDescription(decipher.decrypt()))
+    } catch (error) {
+      result.appendChild(createDescription(error.message))
+    }
   })
 }

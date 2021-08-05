@@ -16,17 +16,22 @@ export class Decipher {
   /**
    * @type {BmpParser}
    */
-  #bmpParser
+  #bmpParserEncrypted
+
+  /**
+   * @type {BmpParser}
+   */
+  #bmpParserKey
 
   /**
    * @param {ArrayBuffer} encryptedBuffer
    * @param {ArrayBuffer} bufferKey
-   * @param {BmpParser} bmpParser
    */
-  constructor(encryptedBuffer, bufferKey, bmpParser) {
+  constructor(encryptedBuffer, bufferKey) {
     this.#encryptedView = new DataView(encryptedBuffer)
     this.#viewKey = new DataView(bufferKey)
-    this.#bmpParser = bmpParser
+    this.#bmpParserEncrypted = new BmpParser(encryptedBuffer)
+    this.#bmpParserKey = new BmpParser(bufferKey)
   }
 
   /**
@@ -38,9 +43,16 @@ export class Decipher {
     return String.fromCharCode(parseInt(value, 2))
   }
 
-  /** @todo Реализовать проверку на наличие зашифрованного сообщения (заголовки?) */
+  #checkForEncryptedMessage() {
+    if (this.#bmpParserEncrypted.applicationDefinedIdentifier === this.#bmpParserKey.applicationDefinedIdentifier) {
+      throw new Error('Зашифрованного сообщения нет!')
+    }
+  }
+
   decrypt() {
-    this.#offset = this.#bmpParser.offsetBits
+    this.#checkForEncryptedMessage()
+    this.#offset = this.#bmpParserKey.offsetBits
+
     let isReadingFinished = false
     let binaryChar = ''
     let string = ''

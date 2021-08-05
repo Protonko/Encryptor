@@ -1,19 +1,6 @@
 import {Encryptor} from '../services/Encryptor'
-import {BmpParser} from '../services/BmpParser'
-
-/**
- * @param {String} href
- * @return {HTMLAnchorElement}
- */
-const createLink = (href) => {
-  const link = document.createElement('a')
-  link.download = 'encryptedFile.bmp'
-  link.className = 'link link--self-end'
-  link.innerText = 'Скачать'
-  link.href = href
-
-  return link;
-}
+import {createDescription} from './createDescription'
+import {createLink} from './createLink'
 
 export const encryptForm = () => {
   const input = document.querySelector('[data-input]')
@@ -25,8 +12,13 @@ export const encryptForm = () => {
       event.preventDefault()
       const buffer = await commonFileInput.files[0].arrayBuffer()
       const encryptionText = input.value
-      const encryptor = new Encryptor(buffer, encryptionText, new BmpParser(buffer))
-      encryptCardFooter.appendChild(createLink(URL.createObjectURL(new Blob([encryptor.encrypt()], {type: 'image/bmp'}))))
+      const encryptor = new Encryptor(buffer, encryptionText)
+
+      try {
+        encryptCardFooter.appendChild(createLink(URL.createObjectURL(new Blob([encryptor.encrypt()], {type: 'image/bmp'}))))
+      } catch (error) {
+        encryptCardFooter.appendChild(createDescription(error.message))
+      }
     }
   )
 }
