@@ -37,6 +37,9 @@ export class Encryptor {
     return value.split('').map(char => char.charCodeAt(0).toString(2))
   }
 
+  /**
+   * @throws {Error}
+   */
   #checkOffsetOverflow() {
     if (this.#offset >= this.#bmpParser.fileSize) {
       throw new Error('Фраза слишком велика для данного файла!')

@@ -43,12 +43,19 @@ export class Decipher {
     return String.fromCharCode(parseInt(value, 2))
   }
 
+  /**
+   * @throws {Error}
+   */
   #checkForEncryptedMessage() {
     if (this.#bmpParserEncrypted.applicationDefinedIdentifier === this.#bmpParserKey.applicationDefinedIdentifier) {
       throw new Error('Зашифрованного сообщения нет!')
     }
   }
 
+  /**
+   * @return {String}
+   * @throws {Error}
+   */
   decrypt() {
     this.#checkForEncryptedMessage()
     this.#offset = this.#bmpParserKey.offsetBits
