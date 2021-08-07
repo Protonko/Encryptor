@@ -4,6 +4,7 @@
   "description": "",
   "main": "webpack.config.js",
   "scripts": {
+    "build": "cross-env NODE_ENV=production webpack --mode production",
     "start": "cross-env SERVE=true webpack serve --open"
   },
   "author": "Egor Ermolaev",
