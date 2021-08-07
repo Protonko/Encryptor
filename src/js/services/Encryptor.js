@@ -1,5 +1,5 @@
-import {BmpParser} from './BmpParser';
-import {MAX_HEXADECIMAL_VALUE, POSSIBLE_DIFFERENCE} from '../static';
+import {BmpParser} from './BmpParser'
+import {MAX_HEXADECIMAL_VALUE, POSSIBLE_DIFFERENCE} from '../static'
 
 export class Encryptor {
   #offset = 0
@@ -39,10 +39,11 @@ export class Encryptor {
   }
 
   /**
+   * @param {Number} binaryLength
    * @throws {Error}
    */
-  #checkOffsetOverflow() {
-    if (this.#offset >= this.#bmpParser.fileSize) {
+  #checkPhraseLength(binaryLength) {
+    if (binaryLength >= this.#bmpParser.bitmapDataSize) {
       throw new Error('Фраза слишком велика для данного файла!')
     }
   }
@@ -70,15 +71,12 @@ export class Encryptor {
     this.#offset = this.#bmpParser.offsetBits
     const binaryChars = this.encode(this.#encryptionText).join().split('')
 
-    try {
-      binaryChars.forEach(char => {
-        this.#checkOffsetOverflow()
-        this.#view.setUint8(this.#offset, this.#updateUint8(char))
-        this.#offset++
-      })
-    } catch (error) {
-      throw new Error(error.message)
-    }
+    this.#checkPhraseLength(binaryChars.length)
+
+    binaryChars.forEach(char => {
+      this.#view.setUint8(this.#offset, this.#updateUint8(char))
+      this.#offset++
+    })
 
     // Добавляем точку выхода
     this.#view.setUint8(this.#offset, this.#updateUint8(POSSIBLE_DIFFERENCE.EXIT_POINT))

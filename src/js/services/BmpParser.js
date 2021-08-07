@@ -25,6 +25,7 @@ export class BmpParser {
 
   /**
    * Проверка на соответствие файла .bmp формату
+   * @throws {Error}
    */
   #checkHeaderField() {
     if (this.#decoder.decode(new Uint8Array(this.#view.buffer, 0, 2)) !== this.#BMP_HEADER_FIELD) {
@@ -43,8 +44,8 @@ export class BmpParser {
   /**
    * @returns {Number}
    */
-  get fileSize() {
-    return this.#view.getUint32(2, true)
+  get bitmapDataSize() {
+    return this.#view.getUint32(34, true)
   }
 
   /**

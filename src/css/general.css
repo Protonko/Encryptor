@@ -1,6 +1,3 @@
-@import "card.css";
-@import "file-uploader.css";
-
 * {
     /* Gutters */
     --columns-vertical-gutter: 10px;
