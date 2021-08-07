@@ -1,4 +1,5 @@
 import {BmpParser} from './BmpParser';
+import {POSSIBLE_DIFFERENCE} from '../static';
 
 export class Decipher {
   #offset = 0
@@ -65,25 +66,19 @@ export class Decipher {
     let string = ''
 
     while (!isReadingFinished) {
-      /**
-       * Возможные значения:
-       * 0, 1 - часть символа
-       * 2 - запятая
-       * 3 - точка выхода
-       */
-      const encryptedByte = this.#encryptedView.getUint8(this.#offset) - this.#viewKey.getUint8(this.#offset)
+      const encryptedByte = Math.abs(this.#encryptedView.getUint8(this.#offset) - this.#viewKey.getUint8(this.#offset))
 
       switch (encryptedByte) {
-        case 3:
+        case POSSIBLE_DIFFERENCE.EXIT_POINT:
           string += this.decode(binaryChar)
           isReadingFinished = true
           break
-        case 2:
+        case POSSIBLE_DIFFERENCE.SEPARATOR:
           string += this.decode(binaryChar)
           binaryChar = ''
           break
-        case 1:
-        case 0:
+        case POSSIBLE_DIFFERENCE.BINARY_ONE:
+        case POSSIBLE_DIFFERENCE.BINARY_ZERO:
           binaryChar += encryptedByte
           break
         default:

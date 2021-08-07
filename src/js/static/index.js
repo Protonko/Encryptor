@@ -1,0 +1,8 @@
+export const MAX_HEXADECIMAL_VALUE = 0xFF
+
+export const POSSIBLE_DIFFERENCE = {
+  EXIT_POINT: 3,
+  SEPARATOR: 2,
+  BINARY_ONE: 1,
+  BINARY_ZERO: 0,
+}

@@ -1,4 +1,5 @@
 import {BmpParser} from './BmpParser';
+import {MAX_HEXADECIMAL_VALUE, POSSIBLE_DIFFERENCE} from '../static';
 
 export class Encryptor {
   #offset = 0
@@ -47,6 +48,21 @@ export class Encryptor {
   }
 
   /**
+   * @param {String|Number} char
+   * @return {Number}
+   */
+  #updateUint8(char) {
+    const currentValue = +this.#view.getUint8(this.#offset)
+    const binaryChar = char === ',' ? POSSIBLE_DIFFERENCE.SEPARATOR : +char
+
+    if (currentValue >= MAX_HEXADECIMAL_VALUE - POSSIBLE_DIFFERENCE.EXIT_POINT) {
+      return currentValue - binaryChar
+    }
+
+    return currentValue + binaryChar
+  }
+
+  /**
    * @return {DataView}
    * @throws {Error}
    */
@@ -57,10 +73,7 @@ export class Encryptor {
     try {
       binaryChars.forEach(char => {
         this.#checkOffsetOverflow()
-        const currentValue = +this.#view.getUint8(this.#offset)
-        /** @todo Подумать, что делать если цвет 255 и мы добавляем еще 1 */
-        const updatedValue = currentValue + (char === ',' ? 2 : +char)
-        this.#view.setUint8(this.#offset, updatedValue)
+        this.#view.setUint8(this.#offset, this.#updateUint8(char))
         this.#offset++
       })
     } catch (error) {
@@ -68,7 +81,7 @@ export class Encryptor {
     }
 
     // Добавляем точку выхода
-    this.#view.setUint8(this.#offset, +this.#view.getUint8(this.#offset) + 3)
+    this.#view.setUint8(this.#offset, this.#updateUint8(POSSIBLE_DIFFERENCE.EXIT_POINT))
 
     return this.#view
   }
