@@ -45,20 +45,10 @@ export class Decipher {
   }
 
   /**
-   * @throws {Error}
-   */
-  #checkForEncryptedMessage() {
-    if (this.#bmpParserEncrypted.applicationDefinedIdentifier === this.#bmpParserKey.applicationDefinedIdentifier) {
-      throw new Error('Зашифрованного сообщения нет!')
-    }
-  }
-
-  /**
    * @return {String}
    * @throws {Error}
    */
   decrypt() {
-    this.#checkForEncryptedMessage()
     this.#offset = this.#bmpParserKey.offsetBits
 
     let binaryChar = ''
